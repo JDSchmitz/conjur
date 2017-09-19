@@ -48,13 +48,8 @@ irb(main):001:0> require 'slosilo'
 => true
 irb(main):002:0> key = Slosilo::Key.new
 => #<Slosilo::Key:0x00000001999098 @key=#<OpenSSL::PKey::RSA:0x00000001999048>>
-irb(main):003:0> puts JSON.pretty_generate(key.signed_token('alice'))
-{
-  "data": "alice",
-  "timestamp": "2017-06-14 15:14:04 UTC",
-  "signature": "AA2x...rFnF",
-  "key": "8485e4f593dd2668a062cdaecf28d5bd"
-}
+irb(main):003:0> puts key.issue_jwt(sub: 'alice').to_json
+{"protected":"eyJhbGciOiJjb25qdXIub3JnL3Nsb3NpbG8vdjIiLCJraWQiOiIzZTY4N2E3N2Q0ZjkzOTkxYzZmMzBkMzkzYTNmZGM1MyJ9","payload":"eyJzdWIiOiJhbGljZSIsImlhdCI6MTUwNTgzMjg1NX0=","signature":"jzwY1MmbYQUElR8qA8mFOhWqb2G96W1uaB_BrrMnhUZzNMqVv0g6Z93zjD_KQn4mEOwwV9JcDopsiksvzpIpFsxulE9VtimEQhVoZjBDUmmLCvgjg0feX5YFSCMxHmgZsVs5azwNi8f51URmuIDzRRzJ2AaNWjbNpkx3MSrpjDgRpqbRL1ryVTGkBb7rnYSYhHc8fSK-jRpXrJCFZIf1cSMNKcHXJ3bvSjgxnX4Jv4AfTSahQ9wXseDWibF7tqDfABrewsptKfacJCMGku0OFGcxdUMV0ajgDnflf5kRXHY7UW8-3cXPzQO43-kgeTPIuHedrKfuZnGBA4k8TYnNIz56pNW_e9xzXp13vNYAaquHcTXc_jJeus-6l2OyHzDx"}
 => nil
 {% endhighlight %}
 
@@ -90,7 +85,7 @@ Sequel::Model.db = Sequel.connect ENV['DATABASE_URL']
 Slosilo::adapter = Slosilo::Adapters::SequelAdapter.new
 
 # Issue a token
-puts Slosilo["authn:#{account}"].signed_token 'alice'
+puts Slosilo["authn:#{account}"].issue_jwt(sub: 'alice').to_json
 {% endhighlight %}
 
 ### Extracting the Signing Key
@@ -154,7 +149,7 @@ post '/:account/:login/authenticate' do
 
   halt 401 unless login == "public"
   halt 404 unless key = Slosilo["authn:#{account}"]
-  key.signed_token(login).to_json
+  key.issue_jwt(sub: login).to_json
 end
 {% endhighlight %}
 
@@ -175,7 +170,7 @@ Then send a `POST` request to authenticate as the account user "public":
 
 {% highlight shell %}
 $ curl -X POST localhost:3000/myorg/public/authenticate
-{"data":"public","timestamp":"2017-06-14 18:18:26 UTC","signature":"DR_9l...c22cd"}
+{"protected":"eyJhbGciOiJjb25qdXIub3JnL3Nsb3NpbG8vdjIiLCJraWQiOiIzZTY4N2E3N2Q0ZjkzOTkxYzZmMzBkMzkzYTNmZGM1MyJ9","payload":"eyJzdWIiOiJhbGljZSIsImlhdCI6MTUwNTgzMjg1NX0=","signature":"jzwY1MmbYQUElR8qA8mFOhWqb2G96W1uaB_BrrMnhUZzNMqVv0g6Z93zjD_KQn4mEOwwV9JcDopsiksvzpIpFsxulE9VtimEQhVoZjBDUmmLCvgjg0feX5YFSCMxHmgZsVs5azwNi8f51URmuIDzRRzJ2AaNWjbNpkx3MSrpjDgRpqbRL1ryVTGkBb7rnYSYhHc8fSK-jRpXrJCFZIf1cSMNKcHXJ3bvSjgxnX4Jv4AfTSahQ9wXseDWibF7tqDfABrewsptKfacJCMGku0OFGcxdUMV0ajgDnflf5kRXHY7UW8-3cXPzQO43-kgeTPIuHedrKfuZnGBA4k8TYnNIz56pNW_e9xzXp13vNYAaquHcTXc_jJeus-6l2OyHzDx"}
 {% endhighlight %}
 
 Now send a `POST` request to authenticate as the (invalid) account user "alice":
