@@ -67,15 +67,19 @@ irb(main)> Conjur.configuration.account = "dev" # <- REPLACE ME!
 
 {% include toc.md key='authentication' %}
 
-Once the server connection is configured, the next step is to authenticate to obtain an access token. When you create a Conjur Host, the server issues an API key which you can use to authenticate as that host. Here's how you use it in Ruby:
+Once the server connection is configured, the next step is to authenticate to obtain an access token. When you create a Conjur Host, the server issues an API key which you can use to authenticate as that host. Here's how you use it in Ruby (note: token formatted and abridged in the interests of readability):
 
 {% highlight ruby %}
 irb(main)> host_id = "host/myapp-01"
 irb(main)> api_key = "1vgw4jzvyzmay95mrx2s5ad1d28gt3gh2gesb1411kqcah3nrv01r"
 irb(main)> conjur = Conjur::API.new_from_key host_id, api_key
 irb(main)> puts conjur.token
-{"protected":"eyJhbGciOiJjb25qdXIub3JnL3Nsb3NpbG8vdjIiLCJra
-WQiOiIzZTY4N2E3N2Q0ZjkzOTkxYzZmMzBkMzkzYTNmZGM1MyJ9","payload":"eyJzdWIiOiJhbGljZSIsImlhdCI6MTUwNTgzMjg1NX0=","signature":"jzwY1MmbYQUElR8qA8mFOhWqb2G96W1uaB_BrrMnhUZzNMqVv0g6Z93zjD_KQn4mEOwwV9JcDopsiksvzpIpFsxulE9VtimEQhVoZjBDUmmLCvgjg0feX5YFSCMxHmgZsVs5azwNi8f51URmuIDzRRzJ2AaNWjbNpkx3MSrpjDgRpqbRL1ryVTGkBb7rnYSYhHc8fSK-jRpXrJCFZIf1cSMNKcHXJ3bvSjgxnX4Jv4AfTSahQ9wXseDWibF7tqDfABrewsptKfacJCMGku0OFGcxdUMV0ajgDnflf5kRXHY7UW8-3cXPzQO43-kgeTPIuHedrKfuZnGBA4k8TYnNIz56pNW_e9xzXp13vNYAaquHcTXc_jJeus-6l2OyHzDx"}
+{
+  "protected": "eyJhbGciOiJjb25qdXIub3JnL3Nsb3NpbG8vdjIiLCJra
+WQiOiIzZTY4N2E3N2Q0ZjkzOTkxYzZmMzBkMzkzYTNmZGM1MyJ9",
+  "payload": "eyJzdWIiOiJhbGljZSIsImlhdCI6MTUwNTgzMjg1NX0=",
+  "signature": "jzwY1MmbYQUEl[...]6l2OyHzDx"
+}
 {% endhighlight %}
 
 <div class="note">

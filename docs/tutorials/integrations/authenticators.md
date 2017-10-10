@@ -41,7 +41,7 @@ To issue an access token, you need two things:
 1. A signing key, which is a 2048-bit RSA private key.
 2. The identity of the role for whom you want to issue the token.
 
-Here's a snippet showing how easy it is to issue an access token for a user called "alice":
+Here's a snippet showing how easy it is to issue an access token for a user called "alice" (note: output formatted and abridged for readability):
 
 {% highlight ruby %}
 irb(main):001:0> require 'slosilo'
@@ -49,7 +49,11 @@ irb(main):001:0> require 'slosilo'
 irb(main):002:0> key = Slosilo::Key.new
 => #<Slosilo::Key:0x00000001999098 @key=#<OpenSSL::PKey::RSA:0x00000001999048>>
 irb(main):003:0> puts key.issue_jwt(sub: 'alice').to_json
-{"protected":"eyJhbGciOiJjb25qdXIub3JnL3Nsb3NpbG8vdjIiLCJraWQiOiIzZTY4N2E3N2Q0ZjkzOTkxYzZmMzBkMzkzYTNmZGM1MyJ9","payload":"eyJzdWIiOiJhbGljZSIsImlhdCI6MTUwNTgzMjg1NX0=","signature":"jzwY1MmbYQUElR8qA8mFOhWqb2G96W1uaB_BrrMnhUZzNMqVv0g6Z93zjD_KQn4mEOwwV9JcDopsiksvzpIpFsxulE9VtimEQhVoZjBDUmmLCvgjg0feX5YFSCMxHmgZsVs5azwNi8f51URmuIDzRRzJ2AaNWjbNpkx3MSrpjDgRpqbRL1ryVTGkBb7rnYSYhHc8fSK-jRpXrJCFZIf1cSMNKcHXJ3bvSjgxnX4Jv4AfTSahQ9wXseDWibF7tqDfABrewsptKfacJCMGku0OFGcxdUMV0ajgDnflf5kRXHY7UW8-3cXPzQO43-kgeTPIuHedrKfuZnGBA4k8TYnNIz56pNW_e9xzXp13vNYAaquHcTXc_jJeus-6l2OyHzDx"}
+{
+  "protected": "eyJhbGciOiJjb25qdXIub3JnL3Nsb3NpbG8vdjIiLCJraWQiOiIzZTY4N2E3N2Q0ZjkzOTkxYzZmMzBkMzkzYTNmZGM1MyJ9",
+  "payload": "eyJzdWIiOiJhbGljZSIsImlhdCI6MTUwNTgzMjg1NX0=",
+  "signature": "jzwY1MmbYQUElR8qA8mFOhWq[...]TXc_jJeus-6l2OyHzDx"
+}
 => nil
 {% endhighlight %}
 
@@ -170,7 +174,11 @@ Then send a `POST` request to authenticate as the account user "public":
 
 {% highlight shell %}
 $ curl -X POST localhost:3000/myorg/public/authenticate
-{"protected":"eyJhbGciOiJjb25qdXIub3JnL3Nsb3NpbG8vdjIiLCJraWQiOiIzZTY4N2E3N2Q0ZjkzOTkxYzZmMzBkMzkzYTNmZGM1MyJ9","payload":"eyJzdWIiOiJhbGljZSIsImlhdCI6MTUwNTgzMjg1NX0=","signature":"jzwY1MmbYQUElR8qA8mFOhWqb2G96W1uaB_BrrMnhUZzNMqVv0g6Z93zjD_KQn4mEOwwV9JcDopsiksvzpIpFsxulE9VtimEQhVoZjBDUmmLCvgjg0feX5YFSCMxHmgZsVs5azwNi8f51URmuIDzRRzJ2AaNWjbNpkx3MSrpjDgRpqbRL1ryVTGkBb7rnYSYhHc8fSK-jRpXrJCFZIf1cSMNKcHXJ3bvSjgxnX4Jv4AfTSahQ9wXseDWibF7tqDfABrewsptKfacJCMGku0OFGcxdUMV0ajgDnflf5kRXHY7UW8-3cXPzQO43-kgeTPIuHedrKfuZnGBA4k8TYnNIz56pNW_e9xzXp13vNYAaquHcTXc_jJeus-6l2OyHzDx"}
+{
+  "protected": "eyJhbGciOiJjb25qdXIub3JnL3Nsb3NpbG8vdjIiLCJraWQiOiIzZTY4N2E3N2Q0ZjkzOTkxYzZmMzBkMzkzYTNmZGM1MyJ9",
+  "payload": "eyJzdWIiOiJhbGljZSIsImlhdCI6MTUwNTgzMjg1NX0=",
+  "signature": "jzwY1MmbYQUElR8qA8[...]c_jJeus-6l2OyHzDx"
+}
 {% endhighlight %}
 
 Now send a `POST` request to authenticate as the (invalid) account user "alice":
